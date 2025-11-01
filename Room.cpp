@@ -1,5 +1,7 @@
 #include "Room.h"
 
+std::string DIRECTION_NAMES[4] = { "north", "east", "south", "west" };
+
 #pragma region Base Room
 void Room::DebugDisplay() const 
 { 
@@ -39,6 +41,30 @@ void Room::DebugDisplay() const
 	else
 	{
 		std::cout << "No exit to the west.\n";
+	}
+}
+
+void Room::EnterDisplay() const
+{
+	if (dark)
+	{
+		std::cout << darkDesc << '\n';
+	}
+	else
+	{
+		std::cout << shortDesc << '\n';
+		for (auto &d : DIRECTION_NAMES)
+		{
+			const Room* exitPtr = nullptr;
+			if (d == "north") exitPtr = exitNorth;
+			else if (d == "east") exitPtr = exitEast;
+			else if (d == "south") exitPtr = exitSouth;
+			else if (d == "west") exitPtr = exitWest;
+			if (exitPtr != nullptr)
+			{
+				std::cout << "There is an exit to the " << d << ".\n";
+			}
+		}
 	}
 }
 

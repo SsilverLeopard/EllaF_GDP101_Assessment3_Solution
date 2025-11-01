@@ -19,11 +19,9 @@ public:
 	Room() : shortDesc(""), longDesc(""), darkDesc(""), dark(false), exitNorth(nullptr), exitEast(nullptr), exitSouth(nullptr), exitWest(nullptr) {}
 
 	// Parameterised constructor
-	Room(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-	const Room* _exitNorth = nullptr, const Room* _exitEast = nullptr, const Room* _exitSouth = nullptr, const Room* _exitWest = nullptr) :
+	Room(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc = "", bool _dark = false) :
 
-		shortDesc(_shortDesc), longDesc(_longDesc), darkDesc(_darkDesc), dark(_dark),
-		exitNorth(_exitNorth), exitEast(_exitEast), exitSouth(_exitSouth), exitWest(_exitWest) {}
+		shortDesc(_shortDesc), longDesc(_longDesc), darkDesc(_darkDesc), dark(_dark) {}
 
 	// Copy constructor
 	Room (const Room& other) : 
@@ -55,7 +53,6 @@ public:
 		exitWest = _exitWest;
 	}
 
-
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const;
 };
@@ -73,11 +70,10 @@ public:
 	RoomEnemy() : Room(), enemyName(""), enemyHealth(1), enemyDamage(0), enemyScore(0), enemyAlive(true) {}
 	// Parameterised constructor
 	RoomEnemy(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr,
 		bool _enemyAlive = true, const std::string& _enemyName = "",
 		unsigned int _enemyHealth = 1, unsigned int _enemyDamage = 0, unsigned int _enemyScore = 0) :
 
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest),
+		Room(_shortDesc, _longDesc, _darkDesc, _dark),
 		enemyAlive(_enemyAlive), enemyName(_enemyName),
 		enemyHealth(_enemyHealth), enemyDamage(_enemyDamage), enemyScore(_enemyScore) {}
 	
@@ -108,10 +104,8 @@ public:
 	RoomItem() : Room(), item(nullptr) {}
 
 	// Parameterised constructor with existing item
-	RoomItem(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr,
-		Item* _item = nullptr) :
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest)
+	RoomItem(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark, Item* _item = nullptr) :
+		Room(_shortDesc, _longDesc, _darkDesc, _dark)
 	{
 		if (_item != nullptr) {
 			// Use dynamic_cast to determine the actual derived type of the item
@@ -128,26 +122,23 @@ public:
 
 	// Parameterised constructor with item parameters, basic item
 	RoomItem(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr,
-		const std::string& _itemName = "", const std::string& _itemDesc = "", bool _itemConsumable = false) :
+		const std::string& _itemName, const std::string& _itemDesc, bool _itemConsumable) :
 
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest),
+		Room(_shortDesc, _longDesc, _darkDesc, _dark),
 		item(new Item(_itemName, _itemDesc, _itemConsumable)) {}
 
-	// Parameterised constructor with item parameters, weapon item (amount after bool for distinction from food)
+	// Parameterised constructor with item parameters, weapon item
 	RoomItem(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr,
-		const std::string& _itemName = "", const std::string& _itemDesc = "", bool _itemConsumable = false, unsigned int _itemDamage = 0) :
+		const std::string& _itemName, const std::string& _itemDesc, bool _itemConsumable, unsigned int _itemDamage) :
 
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest),
+		Room(_shortDesc, _longDesc, _darkDesc, _dark),
 		item(new ItemWeapon(_itemName, _itemDesc, _itemConsumable, _itemDamage)) {}
 
-	// Parameterised constructor with item parameters, food item (amount before bool for distinction from weapon)
+	// Parameterised constructor with item parameters, food item (excess char for distinction)
 	RoomItem(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr,
-		const std::string& _itemName = "", const std::string& _itemDesc = "", unsigned int _itemHeal = 0, bool _itemConsumable = false) :
+		const std::string& _itemName, const std::string& _itemDesc, unsigned int _itemHeal, bool _itemConsumable, char f) :
 
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest),
+		Room(_shortDesc, _longDesc, _darkDesc, _dark),
 		item(new ItemFood(_itemName, _itemDesc, _itemHeal, _itemConsumable)) {}
 
 	// Copy constructor
@@ -183,9 +174,8 @@ public:
 	RoomTreasure() : Room(), treasureDesc(""), treasureScore(0), collected(false) {}
 	// Parameterised constructor
 	RoomTreasure(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr, 
 		const std::string& _treasureDesc = "", unsigned int _treasureScore = 0, bool _collected = false) :
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest),
+		Room(_shortDesc, _longDesc, _darkDesc, _dark),
 		treasureDesc(_treasureDesc), treasureScore(_treasureScore), collected(_collected) {}
 	// Copy constructor
 	RoomTreasure(const RoomTreasure& other) : Room(other), treasureDesc(other.treasureDesc), treasureScore(other.treasureScore), collected(other.collected) {}
@@ -206,9 +196,8 @@ public:
 	// Default constructor
 	RoomExit() : Room() {}
 	// Parameterised constructor
-	RoomExit(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr) :
-		Room(_shortDesc, _longDesc, _darkDesc, _dark, _exitNorth, _exitEast, _exitSouth, _exitWest) {}
+	RoomExit(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark) :
+		Room(_shortDesc, _longDesc, _darkDesc, _dark) {}
 	// Copy constructor from base class
 	RoomExit(const Room& other) : Room(other) {}
 	// Copy constructor

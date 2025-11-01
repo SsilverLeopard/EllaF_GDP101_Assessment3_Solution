@@ -34,13 +34,16 @@ public:
 	// setup function that moves the game grid and places the player and sets their stats
 	void setup(unsigned int _startX, unsigned int _startY, RoomGrid&& _allRooms,
 		unsigned int playerHealth, unsigned int playerScore);
+	// room reset function
+	void createRooms();
 
 	// Interface functions
 	unsigned short getPlayerX() const { return playerX; }
 	unsigned short getPlayerY() const { return playerY; }
 	unsigned int getPlayerHealth() const { return playerHealth; }
-	unsigned int getPlayerScore() const { return playerHealth; }
-
+	unsigned int getPlayerScore() const { return playerScore; }
+	Room* getCurrentRoom() const { return currentRoom; }
+	unsigned int getReturning() const { return returning; }
 
 	// command processing function
 	void command();
@@ -58,7 +61,6 @@ public:
 
 	// Game functions
 	void health(int _change);
-
 
 	// default destructor because unique_ptr cleans itself up
 	~Game() = default;
