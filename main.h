@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "Room.h"
-#include "Item.h"
+#include <array>
+#include "Room.h" // room includes Item.h
+#include "Game.h"
 
 /*Create a text adventure game where players navigate a maze of rooms stored in a 2D array.
 * Use a custom class for each type of room, derived from a common Room class. Each type of room should output a custom message or obstacle for the player to overcome.
@@ -33,6 +34,9 @@ Key: Entry, Treasure, Item, eXit, eNemy, Blank, Key, !dark, =door, -| not a path
 10 11 12 13
 20 21 22 23
 30 31 32 33
+  N
+W   E
+  S
 */
 
 /*
@@ -42,7 +46,7 @@ Key: Entry, Treasure, Item, eXit, eNemy, Blank, Key, !dark, =door, -| not a path
 * commands: help, look (prints long description and valid directions), move (nesw), use (item name), fight, get, inventory, restart, exit
 * player has hp and can use items from health rooms to heal
 * player has score that increases when you get treasure or kill enemy
-* start off with nothing at all. room 21 is a sword which you can use to fight. room 33 is a torch which you can use to see in dark rooms.
+* start off with nothing at all. room 21 is a sword which you can use to fight. room 33 is a better sword. room 12 is a torch to see in dark rooms. room 30 is a key to exit the exit room at 03.
 * fighting with no sword you punch things for low damage, fighting with sword you deal more damage
 *
 * classes: room, item, enemy
@@ -103,11 +107,3 @@ Key: Entry, Treasure, Item, eXit, eNemy, Blank, Key, !dark, =door, -| not a path
 
 // Kyle: A good way to show polymorphism would be to use dynamic cast that checks if the current room matches a type that suits the current action.
 // I can have an array of the base class pointers and the polymorphism inheritance stuff works on them! yayayayayayay! i hope.
-
-class Game
-{
-
-		
-};
-
-void ParseCommand(const std::string& input);

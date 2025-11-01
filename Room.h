@@ -20,7 +20,7 @@ public:
 
 	// Parameterised constructor
 	Room(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-	Room* _exitNorth = nullptr, Room* _exitEast = nullptr, Room* _exitSouth = nullptr, Room* _exitWest = nullptr) :
+	const Room* _exitNorth = nullptr, const Room* _exitEast = nullptr, const Room* _exitSouth = nullptr, const Room* _exitWest = nullptr) :
 
 		shortDesc(_shortDesc), longDesc(_longDesc), darkDesc(_darkDesc), dark(_dark),
 		exitNorth(_exitNorth), exitEast(_exitEast), exitSouth(_exitSouth), exitWest(_exitWest) {}
@@ -31,7 +31,7 @@ public:
 		exitNorth(other.exitNorth), exitEast(other.exitEast), exitSouth(other.exitSouth), exitWest(other.exitWest) {}
 
 	// Destructor
-	virtual ~Room() { delete exitNorth; delete exitEast; delete exitSouth; delete exitWest; std::cout << "destructor basic\n"; }
+	virtual ~Room() { std::cout << "destructor basic\n"; }
 
 	// Interface functions
 	const std::string& getShortDesc() const { return shortDesc; }
@@ -46,6 +46,15 @@ public:
 	const Room* getExitWestPtr() const { return exitWest; }
 	const Room getExitWest() const { return *exitWest; }
 	bool getDark() const { return dark; }
+
+	void setExits(const Room* _exitNorth = nullptr, const Room* _exitEast = nullptr, const Room* _exitSouth = nullptr, const Room* _exitWest = nullptr)
+	{ 
+		exitNorth = _exitNorth; 
+		exitEast = _exitEast;
+		exitSouth = _exitSouth;
+		exitWest = _exitWest;
+	}
+
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const;
