@@ -9,14 +9,14 @@ protected:
 	std::string shortDesc;
 	std::string longDesc;
 	std::string darkDesc;
-	const Room* exitNorth = nullptr;
-	const Room* exitEast = nullptr;
-	const Room* exitSouth = nullptr;
-	const Room* exitWest = nullptr;
+	bool exitNorth = false;
+	bool exitEast = false;
+	bool exitSouth = false;
+	bool exitWest = false;
 	bool dark;
 public:
 	// Default constructor
-	Room() : shortDesc(""), longDesc(""), darkDesc(""), dark(false), exitNorth(nullptr), exitEast(nullptr), exitSouth(nullptr), exitWest(nullptr) {}
+	Room() : shortDesc(""), longDesc(""), darkDesc(""), dark(false), exitNorth(false), exitEast(false), exitSouth(false), exitWest(false) {}
 
 	// Parameterised constructor
 	Room(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc = "", bool _dark = false) :
@@ -29,23 +29,20 @@ public:
 		exitNorth(other.exitNorth), exitEast(other.exitEast), exitSouth(other.exitSouth), exitWest(other.exitWest) {}
 
 	// Destructor
-	virtual ~Room() { std::cout << "destructor basic\n"; }
+	virtual ~Room() = default;
 
 	// Interface functions
 	const std::string& getShortDesc() const { return shortDesc; }
 	const std::string& getLongDesc() const { return longDesc; }
 	const std::string& getDarkDesc() const { return darkDesc; }
-	const Room* getExitNorthPtr() const { return exitNorth; }
-	const Room getExitNorth() const { return *exitNorth; }
-	const Room* getExitEastPtr() const { return exitEast; }
-	const Room getExitEast() const { return *exitEast; }
-	const Room* getExitSouthPtr() const { return exitSouth; }
-	const Room getExitSouth() const { return *exitSouth; }
-	const Room* getExitWestPtr() const { return exitWest; }
-	const Room getExitWest() const { return *exitWest; }
+	bool getExitNorth() const { return exitNorth; }
+	bool getExitEast() const { return exitEast; }
+	bool getExitSouth() const { return exitSouth; }
+	bool getExitWest() const { return exitWest; }
 	bool getDark() const { return dark; }
+	void setDark(bool _dark) { dark = _dark; }
 
-	void setExits(const Room* _exitNorth = nullptr, const Room* _exitEast = nullptr, const Room* _exitSouth = nullptr, const Room* _exitWest = nullptr)
+	void setExits(bool _exitNorth, bool _exitEast, bool _exitSouth, bool _exitWest)
 	{ 
 		exitNorth = _exitNorth; 
 		exitEast = _exitEast;
@@ -55,13 +52,19 @@ public:
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const;
+
+	// Game display function that prints information based on room state for entering a room
+	virtual void EnterDisplay() const;
+
+	// Game display function that prints long description depending on room state
+	virtual void LongDisplay() const;
 };
 
 class RoomEnemy : public Room
 {
 protected:
 	std::string enemyName;
-	unsigned int enemyHealth;
+	int enemyHealth;
 	unsigned int enemyDamage;
 	unsigned int enemyScore;
 	bool enemyAlive;
@@ -70,11 +73,11 @@ public:
 	RoomEnemy() : Room(), enemyName(""), enemyHealth(1), enemyDamage(0), enemyScore(0), enemyAlive(true) {}
 	// Parameterised constructor
 	RoomEnemy(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		bool _enemyAlive = true, const std::string& _enemyName = "",
-		unsigned int _enemyHealth = 1, unsigned int _enemyDamage = 0, unsigned int _enemyScore = 0) :
+		const std::string& _enemyName,
+		unsigned int _enemyHealth, unsigned int _enemyDamage, unsigned int _enemyScore) :
 
 		Room(_shortDesc, _longDesc, _darkDesc, _dark),
-		enemyAlive(_enemyAlive), enemyName(_enemyName),
+		enemyAlive(true), enemyName(_enemyName),
 		enemyHealth(_enemyHealth), enemyDamage(_enemyDamage), enemyScore(_enemyScore) {}
 	
 	// Copy constructor
@@ -86,10 +89,20 @@ public:
 		enemyName(""), enemyHealth(1), enemyDamage(0), enemyScore(0), enemyAlive(true) {}
 
 	// Destructor
-	~RoomEnemy() { std::cout << "destructor enemy\n"; }
+	~RoomEnemy() = default;
 
 	// Interface functions
+	std::string getEnemyName() const { return enemyName; }
+	int getEnemyHealth() const { return enemyHealth; }
+	unsigned int getEnemyDamage() const { return enemyDamage; }
+	unsigned int getEnemyScore() const { return enemyScore; }
+	bool isEnemyAlive() const { return enemyAlive; }
 
+	// Game functions
+	// Damage the enemy, return score if enemy dies
+	unsigned int damageEnemy(int _damage);
+	// Game display function that prints long description depending on room state
+	virtual void LongDisplay() const override;
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;
@@ -157,7 +170,21 @@ public:
 	RoomItem(const Room& other) : Room(other), item(nullptr) {}
 
 	// Destructor
-	~RoomItem() { delete item; std::cout << "destructor item\n"; }
+	~RoomItem() { delete item; }
+
+	// Interface functions
+	Item* getItem() const { return item; }
+
+	// Gameplay functions
+	// Transfer ownership of the item to the caller
+	std::unique_ptr<Item> collectItem() 
+	{
+		std::unique_ptr<Item> temp = std::unique_ptr<Item>(item);
+		item = nullptr;
+		return temp;
+	}
+	// Game display function that prints long description depending on room state
+	virtual void LongDisplay() const override;
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;
@@ -168,22 +195,31 @@ class RoomTreasure : public Room
 protected:
 	std::string treasureDesc;
 	unsigned int treasureScore;
-	bool collected;
+	bool collected = false;
 public:
 	// Default constructor
-	RoomTreasure() : Room(), treasureDesc(""), treasureScore(0), collected(false) {}
+	RoomTreasure() : Room(), treasureDesc(""), treasureScore(0) {}
 	// Parameterised constructor
 	RoomTreasure(const std::string& _shortDesc, const std::string& _longDesc, const std::string& _darkDesc, bool _dark,
-		const std::string& _treasureDesc = "", unsigned int _treasureScore = 0, bool _collected = false) :
+		const std::string& _treasureDesc, unsigned int _treasureScore) :
 		Room(_shortDesc, _longDesc, _darkDesc, _dark),
-		treasureDesc(_treasureDesc), treasureScore(_treasureScore), collected(_collected) {}
+		treasureDesc(_treasureDesc), treasureScore(_treasureScore) {}
 	// Copy constructor
 	RoomTreasure(const RoomTreasure& other) : Room(other), treasureDesc(other.treasureDesc), treasureScore(other.treasureScore), collected(other.collected) {}
 	// Copy constructor from base class
-	RoomTreasure(const Room& other) : Room(other), treasureDesc(""), treasureScore(0), collected(false) {}
+	RoomTreasure(const Room& other) : Room(other), treasureDesc(""), treasureScore(0) {}
 
 	// Destructor
-	~RoomTreasure() { std::cout << "destructor treasure\n"; }
+	~RoomTreasure() = default;
+
+	// Interface functions
+	std::string getTreasureDesc() const { return treasureDesc; }
+	unsigned int getTreasureScore() const { return treasureScore; }
+	bool isCollected() const { return collected; }
+	void setCollected(bool _collected) { collected = _collected; }
+
+	// Game display function that prints long description depending on room state
+	virtual void LongDisplay() const override;
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;
@@ -204,7 +240,7 @@ public:
 	RoomExit(const RoomExit& other) : Room(other) {}
 
 	// Destructor
-	~RoomExit() { std::cout << "destructor exit\n"; }
+	~RoomExit() = default;
 
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;

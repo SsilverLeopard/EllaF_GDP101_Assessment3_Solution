@@ -10,61 +10,36 @@ void Room::DebugDisplay() const
 	std::cout << "Long Description: " << longDesc << "\n";
 	std::cout << "Dark Description: " << darkDesc << "\n";
 	std::cout << "Is Dark: " << (dark ? "yes" : "no") << "\n";
-	if (exitNorth != nullptr) 
-	{ 
-		std::cout << "Exit exists to the north, short desc: " << exitNorth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the north.\n";
-	}
-	if (exitEast != nullptr) 
-	{ 
-		std::cout << "Exit exists to the east, short desc: " << exitEast->getShortDesc() << "\n"; 
-	}
-	else
-	{ 
-		std::cout << "No exit to the east.\n"; 
-	}
-	if (exitSouth != nullptr)
-	{
-		std::cout << "Exit exists to the south, short desc: " << exitSouth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the south.\n";
-	}
-	if (exitWest != nullptr)
-	{
-		std::cout << "Exit exists to the west, short desc: " << exitWest->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the west.\n";
-	}
+	if (exitNorth) 
+	{ std::cout << "Exit exists to the north.\n"; }
+	else { std::cout << "No exit to the north.\n"; }
+	if (exitEast) { std::cout << "Exit exists to the east.\n"; }
+	else { std::cout << "No exit to the east.\n"; }
+	if (exitSouth) { std::cout << "Exit exists to the south.\n"; }
+	else { std::cout << "No exit to the south.\n"; }
+	if (exitWest) { std::cout << "Exit exists to the west.\n"; }
+	else { std::cout << "No exit to the west.\n"; }
 }
 
 void Room::EnterDisplay() const
 {
-	if (dark)
-	{
-		std::cout << darkDesc << '\n';
-	}
+	if (dark) { std::cout << darkDesc << '\n'; }
 	else
 	{
 		std::cout << shortDesc << '\n';
-		for (auto &d : DIRECTION_NAMES)
-		{
-			const Room* exitPtr = nullptr;
-			if (d == "north") exitPtr = exitNorth;
-			else if (d == "east") exitPtr = exitEast;
-			else if (d == "south") exitPtr = exitSouth;
-			else if (d == "west") exitPtr = exitWest;
-			if (exitPtr != nullptr)
-			{
-				std::cout << "There is an exit to the " << d << ".\n";
-			}
-		}
+	}
+}
+
+void Room::LongDisplay() const
+{
+	if (dark) { std::cout << darkDesc << '\n'; }
+	else
+	{
+		std::cout << longDesc << '\n';
+		if (exitNorth) { std::cout << "There is an exit to the north.\n"; }
+		if (exitEast) { std::cout << "There is an exit to the east.\n"; }
+		if (exitSouth) { std::cout << "There is an exit to the south.\n"; }
+		if (exitWest) { std::cout << "There is an exit to the west.\n"; }
 	}
 }
 
@@ -78,37 +53,61 @@ void RoomEnemy::DebugDisplay() const
 	std::cout << "Long Description: " << longDesc << "\n";
 	std::cout << "Dark Description: " << darkDesc << "\n";
 	std::cout << "Is Dark: " << (dark ? "yes" : "no") << "\n";
-	if (exitNorth != nullptr)
+	if (exitNorth) { std::cout << "Exit exists to the north.\n"; }
+	else { std::cout << "No exit to the north.\n"; }
+	if (exitEast) { std::cout << "Exit exists to the east.\n"; }
+	else { std::cout << "No exit to the east.\n"; }
+	if (exitSouth) { std::cout << "Exit exists to the south.\n"; }
+	else { std::cout << "No exit to the south.\n"; }
+	if (exitWest) { std::cout << "Exit exists to the west.\n"; }
+	else { std::cout << "No exit to the west.\n"; }
+
+	std::cout << "There is an enemy in this room.\n";
+	if (!enemyAlive) 
 	{
-		std::cout << "Exit exists to the north, short desc: " << exitNorth->getShortDesc() << "\n";
+		std::cout << "It is a dead " << enemyName << ".\n";
 	}
 	else
 	{
-		std::cout << "No exit to the north.\n";
+		std::cout << "It is a " << enemyName << ".\n";
 	}
-	if (exitEast != nullptr)
+	
+}
+unsigned int RoomEnemy::damageEnemy(int _damage)
+{
+	if (enemyAlive)
 	{
-		std::cout << "Exit exists to the east, short desc: " << exitEast->getShortDesc() << "\n";
+		enemyHealth -= _damage;
+		if (enemyHealth <= 0)
+		{
+			enemyHealth = 0;
+			enemyAlive = false;
+			return enemyScore;
+		}
 	}
+	return 0;
+}
+
+void RoomEnemy::LongDisplay() const
+{
+	if (dark) { std::cout << darkDesc << '\n'; }
 	else
 	{
-		std::cout << "No exit to the east.\n";
-	}
-	if (exitSouth != nullptr)
-	{
-		std::cout << "Exit exists to the south, short desc: " << exitSouth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the south.\n";
-	}
-	if (exitWest != nullptr)
-	{
-		std::cout << "Exit exists to the west, short desc: " << exitWest->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the west.\n";
+		std::cout << longDesc << '\n';
+		if (exitNorth) { std::cout << "There is an exit to the north.\n"; }
+		if (exitEast) { std::cout << "There is an exit to the east.\n"; }
+		if (exitSouth) { std::cout << "There is an exit to the south.\n"; }
+		if (exitWest) { std::cout << "There is an exit to the west.\n"; }
+		std::cout << "There is an enemy in this room.\n";
+		if (!enemyAlive)
+		{
+			std::cout << "It is a dead " << enemyName << ".\n";
+		}
+		else
+		{
+			std::cout << "It is a " << enemyName << ".\n";
+			std::cout << "It has " << enemyHealth << " health, can deal " << enemyDamage << " damage, and is carrying " << enemyScore << " gold.\n";
+		}
 	}
 }
 
@@ -122,46 +121,44 @@ void RoomItem::DebugDisplay() const
 	std::cout << "Long Description: " << longDesc << "\n";
 	std::cout << "Dark Description: " << darkDesc << "\n";
 	std::cout << "Is Dark: " << (dark ? "yes" : "no") << "\n";
-	if (exitNorth != nullptr)
-	{
-		std::cout << "Exit exists to the north, short desc: " << exitNorth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the north.\n";
-	}
-	if (exitEast != nullptr)
-	{
-		std::cout << "Exit exists to the east, short desc: " << exitEast->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the east.\n";
-	}
-	if (exitSouth != nullptr)
-	{
-		std::cout << "Exit exists to the south, short desc: " << exitSouth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the south.\n";
-	}
-	if (exitWest != nullptr)
-	{
-		std::cout << "Exit exists to the west, short desc: " << exitWest->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the west.\n";
-	}
+	if (exitNorth) { std::cout << "Exit exists to the north.\n"; }
+	else { std::cout << "No exit to the north.\n"; }
+	if (exitEast) { std::cout << "Exit exists to the east.\n"; }
+	else { std::cout << "No exit to the east.\n"; }
+	if (exitSouth) { std::cout << "Exit exists to the south.\n"; }
+	else { std::cout << "No exit to the south.\n"; }
+	if (exitWest) { std::cout << "Exit exists to the west.\n"; }
+	else { std::cout << "No exit to the west.\n"; }
 	if (item != nullptr)
 	{
 		std::cout << "Room contains an item:\n";
-		item->DebugDisplay();
+		item->Display();
 	}
 	else
 	{
 		std::cout << "Room contains no item.\n";
+	}
+}
+
+void RoomItem::LongDisplay() const
+{
+	if (dark) { std::cout << darkDesc << '\n'; }
+	else
+	{
+		std::cout << longDesc << '\n';
+		if (exitNorth) { std::cout << "There is an exit to the north.\n"; }
+		if (exitEast) { std::cout << "There is an exit to the east.\n"; }
+		if (exitSouth) { std::cout << "There is an exit to the south.\n"; }
+		if (exitWest) { std::cout << "There is an exit to the west.\n"; }
+		if (item != nullptr)
+		{
+			std::cout << "There is a " << item->getItemName() << " here.\n";
+			std::cout << item->getItemDesc() << '\n';
+		}
+		else
+		{
+			std::cout << "There was an item here, but it is gone.\n";
+		}
 	}
 }
 
@@ -170,45 +167,45 @@ void RoomItem::DebugDisplay() const
 #pragma region Treasure Room
 void RoomTreasure::DebugDisplay() const 
 {
-	std::cout << "==Item Room==\n";
+	std::cout << "==Treasure Room==\n";
 	std::cout << "Short Description: " << shortDesc << "\n";
 	std::cout << "Long Description: " << longDesc << "\n";
 	std::cout << "Dark Description: " << darkDesc << "\n";
 	std::cout << "Is Dark: " << (dark ? "yes" : "no") << "\n";
-	if (exitNorth != nullptr)
-	{
-		std::cout << "Exit exists to the north, short desc: " << exitNorth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the north.\n";
-	}
-	if (exitEast != nullptr)
-	{
-		std::cout << "Exit exists to the east, short desc: " << exitEast->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the east.\n";
-	}
-	if (exitSouth != nullptr)
-	{
-		std::cout << "Exit exists to the south, short desc: " << exitSouth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the south.\n";
-	}
-	if (exitWest != nullptr)
-	{
-		std::cout << "Exit exists to the west, short desc: " << exitWest->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the west.\n";
-	}
+	if (exitNorth) { std::cout << "Exit exists to the north.\n"; }
+	else { std::cout << "No exit to the north.\n"; }
+	if (exitEast) { std::cout << "Exit exists to the east.\n"; }
+	else { std::cout << "No exit to the east.\n"; }
+	if (exitSouth) { std::cout << "Exit exists to the south.\n"; }
+	else { std::cout << "No exit to the south.\n"; }
+	if (exitWest) { std::cout << "Exit exists to the west.\n"; }
+	else { std::cout << "No exit to the west.\n"; }
 	std::cout << "Treasure score: " << treasureScore << ".\n";
 	std::cout << "Treasure collected: " << (collected ? "yes" : "no") << ".\n";
+	std::cout << "Treasure description: " << treasureDesc << "\n";
+}
+
+void RoomTreasure::LongDisplay() const
+{
+	if (dark) { std::cout << darkDesc << '\n'; }
+	else
+	{
+		std::cout << longDesc << '\n';
+		if (exitNorth) { std::cout << "There is an exit to the north.\n"; }
+		if (exitEast) { std::cout << "There is an exit to the east.\n"; }
+		if (exitSouth) { std::cout << "There is an exit to the south.\n"; }
+		if (exitWest) { std::cout << "There is an exit to the west.\n"; }
+		if (collected)
+		{
+			std::cout << "There was treasure in this room, but it is gone.\n";
+		}
+		else
+		{
+			std::cout << "There is treasure in this room!\n";
+			std::cout << treasureDesc << '\n';
+			std::cout << "It is worth " << treasureScore << " gold.\n";
+		}
+	}
 }
 
 #pragma endregion
@@ -222,38 +219,14 @@ void RoomExit::DebugDisplay() const
 	std::cout << "Long Description: " << longDesc << "\n";
 	std::cout << "Dark Description: " << darkDesc << "\n";
 	std::cout << "Is dark: " << (dark ? "yes" : "no") << ".\n";
-	if (exitNorth != nullptr)
-	{
-		std::cout << "Exit exists to the north, short desc: " << exitNorth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the north.\n";
-	}
-	if (exitEast != nullptr)
-	{
-		std::cout << "Exit exists to the east, short desc: " << exitEast->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the east.\n";
-	}
-	if (exitSouth != nullptr)
-	{
-		std::cout << "Exit exists to the south, short desc: " << exitSouth->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the south.\n";
-	}
-	if (exitWest != nullptr)
-	{
-		std::cout << "Exit exists to the west, short desc: " << exitWest->getShortDesc() << "\n";
-	}
-	else
-	{
-		std::cout << "No exit to the west.\n";
-	}
+	if (exitNorth) { std::cout << "Exit exists to the north.\n"; }
+	else { std::cout << "No exit to the north.\n"; }
+	if (exitEast) { std::cout << "Exit exists to the east.\n"; }
+	else { std::cout << "No exit to the east.\n"; }
+	if (exitSouth) { std::cout << "Exit exists to the south.\n"; }
+	else { std::cout << "No exit to the south.\n"; }
+	if (exitWest) { std::cout << "Exit exists to the west.\n"; }
+	else { std::cout << "No exit to the west.\n"; }
 }
 
 #pragma endregion

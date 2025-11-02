@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <array>
-#include "Room.h" // room includes Item.h
 #include "Game.h"
+
+// =========== PLEASE NOTE ===========
+//  this header is just my planning.
+// there is a lot of comments but no code.
 
 /*Create a text adventure game where players navigate a maze of rooms stored in a 2D array.
 * Use a custom class for each type of room, derived from a common Room class. Each type of room should output a custom message or obstacle for the player to overcome.
@@ -104,6 +107,3 @@ W   E
 * Player data: current room indices (2D array so x and y), pointer to current room, health int, score int, inventory array of item pointers -- could just use a static array that is big enough for all the items, since its pointers them being different types/classes doesn't matter... or maybe it does. that might be a problem
 *
 */
-
-// Kyle: A good way to show polymorphism would be to use dynamic cast that checks if the current room matches a type that suits the current action.
-// I can have an array of the base class pointers and the polymorphism inheritance stuff works on them! yayayayayayay! i hope.

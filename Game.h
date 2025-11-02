@@ -1,21 +1,23 @@
 #pragma once
-#include "Room.h" // room includes Item.h
+#include "Room.h" 
+#include "Item.h"
 #include <array>
 #include <string>
-#include <iostream>
 #include <memory> // for unique_ptr
-#include <algorithm>
 
 class Game
 {
 private:
+	// constants
+	static const unsigned int INVENTORY_SIZE = 6;
+	static const unsigned int DIMENSION = 4;
+	// player stats
 	unsigned short playerX;
 	unsigned short playerY;
 	unsigned int playerHealth;
 	unsigned int playerScore;
+	// error/exit flag
 	unsigned int returning = 0;
-	static const unsigned int INVENTORY_SIZE = 6;
-	static const unsigned int DIMENSION = 4;
 	// type alias for 2D array of unique_ptrs to rooms
 	using RoomGrid = std::array<std::array<std::unique_ptr<Room>, DIMENSION>, DIMENSION>;
 	// non-owning pointer to the current room (owned in allRooms)
@@ -24,6 +26,7 @@ private:
 	RoomGrid allRooms;
 	// stl array of unique_ptrs to items for inventory
 	std::array<std::unique_ptr<Item>, INVENTORY_SIZE> inventory;
+	bool hurt = false; // whether the player is hurt this turn
 
 public:
 	// Default constructor
@@ -47,6 +50,8 @@ public:
 
 	// command processing function
 	void command();
+	// command processing function for when game ends
+	void limitedCommand();
 
 	// Command functions
 	void help();

@@ -24,6 +24,7 @@
     <ProjectGuid>{efbc9bc7-a6a9-419c-aea0-75462e69a19e}</ProjectGuid>
     <RootNamespace>EllaFGDP101Assessment3Solution</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>EllaF_GDP101_Assessment3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

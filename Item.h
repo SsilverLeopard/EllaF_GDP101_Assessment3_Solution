@@ -16,9 +16,17 @@ public:
 		itemName(_itemName), itemDesc(_itemDesc), consumable(_consumable) {}
 	// Copy constructor
 	Item(const Item& other) : itemName(other.itemName), itemDesc(other.itemDesc), consumable(other.consumable) {}
+	
+	// Destructor
+	virtual ~Item() = default;
 
-	// Display function that prints all information for debugging
-	virtual void DebugDisplay() const;
+	// Interface functions
+	std::string getItemName() const { return itemName; }
+	std::string getItemDesc() const { return itemDesc; }
+	bool isConsumable() const { return consumable; }
+
+	// Display function that prints all information about the item
+	virtual void Display() const;
 };
 
 class ItemWeapon : public Item
@@ -35,8 +43,11 @@ public:
 	// Copy constructor
 	ItemWeapon(const ItemWeapon& other) : Item(other), damageAmount(other.damageAmount) {}
 
-	// Display function that prints all information for debugging
-	virtual void DebugDisplay() const override;
+	// Interface function
+	unsigned int getDamageAmount() const { return damageAmount; }
+
+	// Display function that prints all information about the item
+	virtual void Display() const override;
 };
 
 class ItemFood : public Item
@@ -53,6 +64,9 @@ public:
 	// Copy constructor
 	ItemFood(const ItemFood& other) : Item(other), healAmount(other.healAmount) {}
 
-	// Display function that prints all information for debugging
-	virtual void DebugDisplay() const override;
+	// Interface function
+	unsigned int getHealAmount() const { return healAmount; }
+
+	// Display function that prints all information about the item
+	virtual void Display() const override;
 };
