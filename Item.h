@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 
+// Base Item class
 class Item
 {
 protected:
@@ -28,7 +29,7 @@ public:
 	// Display function that prints all information about the item
 	virtual void Display() const;
 };
-
+// weapon derived class, has damage
 class ItemWeapon : public Item
 {
 protected:
@@ -49,7 +50,7 @@ public:
 	// Display function that prints all information about the item
 	virtual void Display() const override;
 };
-
+// food derived class, has healing
 class ItemFood : public Item
 {
 protected:

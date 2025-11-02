@@ -1,12 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <array>
-#include "Game.h"
-
-// =========== PLEASE NOTE ===========
+// ============= PLEASE NOTE =============
 //  this header is just my planning.
-// there is a lot of comments but no code.
+//  there is a lot of comments but no code.
 
 /*Create a text adventure game where players navigate a maze of rooms stored in a 2D array.
 * Use a custom class for each type of room, derived from a common Room class. Each type of room should output a custom message or obstacle for the player to overcome.

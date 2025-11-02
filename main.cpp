@@ -1,6 +1,8 @@
-#include "main.h"
+#include "Game.h" // for Game class and functions
 #include <memory> // for unique_ptr
 #include <utility> // for std::move
+#include <iostream> // for printing
+#include <array> // for the room grid
 
 // horizontal and vertical size of the room grid
 const static int DIMENSION = 4;

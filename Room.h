@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include "Item.h"
-
+// Base Room class
 class Room
 {
 protected:
@@ -59,7 +59,7 @@ public:
 	// Game display function that prints long description depending on room state
 	virtual void LongDisplay() const;
 };
-
+// Enemy Room derived class, has enemy information with name, damage, health, score, alive status
 class RoomEnemy : public Room
 {
 protected:
@@ -107,7 +107,7 @@ public:
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;
 };
-
+// Item Room derived class, has item pointer
 class RoomItem : public Room
 {
 protected:
@@ -189,7 +189,7 @@ public:
 	// Display function that prints all information without conditions, for debugging
 	virtual void DebugDisplay() const override;
 };
-
+// Treasure Room derived class, has treasure description, score, collected status
 class RoomTreasure : public Room
 {
 protected:

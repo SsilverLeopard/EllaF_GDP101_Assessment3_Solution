@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 #include <memory> // for unique_ptr
-
+// Gamemaster class with functions and player stats to run the game
 class Game
 {
 private:
